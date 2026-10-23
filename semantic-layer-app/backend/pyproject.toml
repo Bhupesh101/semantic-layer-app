@@ -1,0 +1,22 @@
+[project]
+name = "semantic-layer-ai-backend"
+version = "0.1.0"
+requires-python = ">=3.9"
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = ["B008"]  # FastAPI Depends() in defaults
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[tool.black]
+line-length = 120
+target-version = ["py39"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

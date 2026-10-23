@@ -1,0 +1,34 @@
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      SLA_DATA_DIR: /data
+    volumes:
+      - ./data:/data
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+
+  # Optional local LLM: `docker compose --profile ollama up`, then add an Ollama
+  # provider with base URL http://ollama:11434/v1 and pull a model, e.g.
+  # `docker compose exec ollama ollama pull qwen2.5:7b-instruct`
+  ollama:
+    image: ollama/ollama:0.5.4
+    profiles: ["ollama"]
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "11434:11434"
+
+volumes:
+  ollama:
