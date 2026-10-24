@@ -21,7 +21,7 @@ from ..services.providers import async_client, effective_params, resolve_provide
 from ..services.runtime_settings import get_runtime
 from .tools import ToolContext, compact_model, run_tool, tool_schemas
 
-PROMPT_VERSION = "chat_system_v1"
+PROMPT_VERSION = "chat_system_v2"
 PROMPT_FILE = Path(__file__).resolve().parent.parent / "prompts" / f"{PROMPT_VERSION}.md"
 logger = logging.getLogger(__name__)
 

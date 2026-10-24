@@ -14,6 +14,10 @@ Status as of 2026-10-23. ✅ done · 🟨 partial · ⬜ not started · 🔍 wri
 | P7 Chat | 🟨 | Tested with a scripted streaming fake LLM; no live model tested yet |
 | P8 Hardening | 🟨 | Usage log, debug payloads and query cache done; evals and E2E not started |
 | P9 Extensibility | ⬜ | `relationships` reserved in the schema |
+| P10 Analytics foundations | 🟨 | Analyses run as chat tools with LLM-safe summaries and a result cache; no plugin registry, job runner, derived dimensions or Analyses tab yet |
+| P11 Segmentation | 🟨 | RFM scores and segments, K-means k = 2..10 by silhouette, cross-tab and ARI, `segment_customers` tool; cluster names are rule-based, not LLM-generated |
+| P12 Forecasting | 🟨 | SARIMA with ADF/KPSS, STL seasonal strength, AIC search with drift, leakage-free backtest vs naive and seasonal naive, Ljung-Box, 80%/95% intervals, confidence label, `forecast_metric` tool with an interval band chart; no `split_by` |
+| P13, P14 | ⬜ | |
 
 ## Details
 
@@ -49,6 +53,10 @@ Status as of 2026-10-23. ✅ done · 🟨 partial · ⬜ not started · 🔍 wri
 | P8-10 | 🟨 | Responsive layout, labels and keyboard-usable controls; no formal audit |
 | P8-11 | 🟨 | README and `architecture.md` |
 | P9-* | ⬜ | |
+| P10-04, P10-06, P10-09, P10-11, P10-12 | ✅ | Inputs found from semantic roles and metrics; cache keyed on data, model and args; seed 42; segment- and period-level summaries only; prompt v2 requires quality measures and caveats |
+| P11-01…P11-09, P11-11, P11-13, P11-15, P11-16 | ✅ | Tests include hand-computed RFM and planted clusters recovered with ARI > 0.9 |
+| P12-01…P12-03, P12-05…P12-12, P12-14, P12-16…P12-18 | ✅ | Seasonal AR/MA terms only with two cycles left after differencing; fits with too few effective observations are rejected |
+| P12 acceptance | 🟨 | Needs 3+ years of history; the sample has 24 months (`analysis/retail_analysis.py`) |
 
 ## Decisions log
 

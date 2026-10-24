@@ -5,7 +5,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 export PATH="$HOME/.local/node/bin:$PATH"
 
 if [ ! -x "$ROOT/backend/.venv/bin/uvicorn" ]; then
-  python3 -m venv "$ROOT/backend/.venv"
+  "${PYTHON:-python3}" -m venv "$ROOT/backend/.venv"
   "$ROOT/backend/.venv/bin/pip" install -q -r "$ROOT/backend/requirements-dev.txt"
 fi
 [ -d "$ROOT/frontend/node_modules" ] || (cd "$ROOT/frontend" && npm install --no-audit --no-fund)

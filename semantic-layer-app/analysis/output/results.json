@@ -1,0 +1,1136 @@
+{
+ "data": {
+  "raw_rows": 1067371,
+  "after_dedup": 1033036,
+  "sales_rows": 1007913,
+  "sales_rows_with_customer": 779425
+ },
+ "segmentation": {
+  "customers": 5878,
+  "as_of": "2011-12-10",
+  "rfm_segments": [
+   {
+    "segment": "Champions",
+    "customers": 830.0,
+    "avg_recency_days": 8.5,
+    "avg_frequency": 19.4,
+    "avg_monetary": 10703.0,
+    "revenue": 8883518.3,
+    "customer_share_pct": 14.1,
+    "revenue_share_pct": 51.1
+   },
+   {
+    "segment": "Loyal Customers",
+    "customers": 1167.0,
+    "avg_recency_days": 66.7,
+    "avg_frequency": 9.9,
+    "avg_monetary": 4140.3,
+    "revenue": 4831740.0,
+    "customer_share_pct": 19.9,
+    "revenue_share_pct": 27.8
+   },
+   {
+    "segment": "At Risk",
+    "customers": 754.0,
+    "avg_recency_days": 372.4,
+    "avg_frequency": 3.9,
+    "avg_monetary": 1347.8,
+    "revenue": 1016248.6,
+    "customer_share_pct": 12.8,
+    "revenue_share_pct": 5.8
+   },
+   {
+    "segment": "Potential Loyalists",
+    "customers": 711.0,
+    "avg_recency_days": 25.6,
+    "avg_frequency": 2.6,
+    "avg_monetary": 1145.3,
+    "revenue": 814304.4,
+    "customer_share_pct": 12.1,
+    "revenue_share_pct": 4.7
+   },
+   {
+    "segment": "Hibernating",
+    "customers": 1526.0,
+    "avg_recency_days": 458.7,
+    "avg_frequency": 1.3,
+    "avg_monetary": 429.5,
+    "revenue": 655444.7,
+    "customer_share_pct": 26.0,
+    "revenue_share_pct": 3.8
+   },
+   {
+    "segment": "Can't Lose Them",
+    "customers": 71.0,
+    "avg_recency_days": 331.2,
+    "avg_frequency": 15.9,
+    "avg_monetary": 8086.4,
+    "revenue": 574135.9,
+    "customer_share_pct": 1.2,
+    "revenue_share_pct": 3.3
+   },
+   {
+    "segment": "Need Attention",
+    "customers": 268.0,
+    "avg_recency_days": 113.0,
+    "avg_frequency": 3.1,
+    "avg_monetary": 1268.8,
+    "revenue": 340031.4,
+    "customer_share_pct": 4.6,
+    "revenue_share_pct": 2.0
+   },
+   {
+    "segment": "About to Sleep",
+    "customers": 384.0,
+    "avg_recency_days": 106.2,
+    "avg_frequency": 1.4,
+    "avg_monetary": 530.6,
+    "revenue": 203760.5,
+    "customer_share_pct": 6.5,
+    "revenue_share_pct": 1.2
+   },
+   {
+    "segment": "Promising",
+    "customers": 113.0,
+    "avg_recency_days": 38.7,
+    "avg_frequency": 1.0,
+    "avg_monetary": 320.3,
+    "revenue": 36194.1,
+    "customer_share_pct": 1.9,
+    "revenue_share_pct": 0.2
+   },
+   {
+    "segment": "New Customers",
+    "customers": 54.0,
+    "avg_recency_days": 10.5,
+    "avg_frequency": 1.0,
+    "avg_monetary": 359.7,
+    "revenue": 19426.3,
+    "customer_share_pct": 0.9,
+    "revenue_share_pct": 0.1
+   }
+  ],
+  "k_scores": [
+   {
+    "k": 2,
+    "inertia": 8589.0,
+    "silhouette": 0.441
+   },
+   {
+    "k": 3,
+    "inertia": 6354.3,
+    "silhouette": 0.35
+   },
+   {
+    "k": 4,
+    "inertia": 4921.2,
+    "silhouette": 0.365
+   },
+   {
+    "k": 5,
+    "inertia": 4099.1,
+    "silhouette": 0.344
+   },
+   {
+    "k": 6,
+    "inertia": 3554.7,
+    "silhouette": 0.336
+   },
+   {
+    "k": 7,
+    "inertia": 3194.5,
+    "silhouette": 0.306
+   },
+   {
+    "k": 8,
+    "inertia": 2902.4,
+    "silhouette": 0.303
+   },
+   {
+    "k": 9,
+    "inertia": 2656.6,
+    "silhouette": 0.291
+   },
+   {
+    "k": 10,
+    "inertia": 2467.4,
+    "silhouette": 0.289
+   }
+  ],
+  "k": 4,
+  "silhouette": 0.365,
+  "clusters": [
+   {
+    "cluster": "High spend, frequent, active",
+    "customers": 1196.0,
+    "avg_recency_days": 27.7,
+    "avg_frequency": 19.3,
+    "avg_monetary": 10731.2,
+    "revenue": 12834470.9,
+    "customer_share_pct": 20.3,
+    "revenue_share_pct": 73.9,
+    "silhouette": 0.331
+   },
+   {
+    "cluster": "High spend, frequent, cooling",
+    "customers": 1459.0,
+    "avg_recency_days": 230.1,
+    "avg_frequency": 5.1,
+    "avg_monetary": 1948.5,
+    "revenue": 2842867.2,
+    "customer_share_pct": 24.8,
+    "revenue_share_pct": 16.4,
+    "silhouette": 0.314
+   },
+   {
+    "cluster": "Mid spend, regular, active",
+    "customers": 1250.0,
+    "avg_recency_days": 28.3,
+    "avg_frequency": 3.1,
+    "avg_monetary": 857.5,
+    "revenue": 1071864.3,
+    "customer_share_pct": 21.3,
+    "revenue_share_pct": 6.2,
+    "silhouette": 0.291
+   },
+   {
+    "cluster": "Low spend, rare, lapsed",
+    "customers": 1973.0,
+    "avg_recency_days": 394.9,
+    "avg_frequency": 1.4,
+    "avg_monetary": 317.1,
+    "revenue": 625601.8,
+    "customer_share_pct": 33.6,
+    "revenue_share_pct": 3.6,
+    "silhouette": 0.47
+   }
+  ],
+  "agreement_ari": 0.43,
+  "crosstab": {
+   "About to Sleep": {
+    "High spend, frequent, cooling": 39,
+    "Low spend, rare, lapsed": 266,
+    "Mid spend, regular, active": 79
+   },
+   "At Risk": {
+    "High spend, frequent, cooling": 568,
+    "Low spend, rare, lapsed": 186
+   },
+   "Can't Lose Them": {
+    "High spend, frequent, active": 14,
+    "High spend, frequent, cooling": 57
+   },
+   "Champions": {
+    "High spend, frequent, active": 660,
+    "Mid spend, regular, active": 170
+   },
+   "Hibernating": {
+    "High spend, frequent, cooling": 94,
+    "Low spend, rare, lapsed": 1432
+   },
+   "Loyal Customers": {
+    "High spend, frequent, active": 517,
+    "High spend, frequent, cooling": 505,
+    "Low spend, rare, lapsed": 4,
+    "Mid spend, regular, active": 141
+   },
+   "Need Attention": {
+    "High spend, frequent, cooling": 181,
+    "Low spend, rare, lapsed": 45,
+    "Mid spend, regular, active": 42
+   },
+   "New Customers": {
+    "Mid spend, regular, active": 54
+   },
+   "Potential Loyalists": {
+    "High spend, frequent, active": 5,
+    "High spend, frequent, cooling": 15,
+    "Low spend, rare, lapsed": 16,
+    "Mid spend, regular, active": 675
+   },
+   "Promising": {
+    "Low spend, rare, lapsed": 24,
+    "Mid spend, regular, active": 89
+   }
+  },
+  "warnings": [
+   "Spend is very skewed (skewness 25); features are log-transformed before clustering."
+  ]
+ },
+ "forecast": {
+  "month": {
+   "grain": "month",
+   "model": "SARIMA(0,0,2)(0,1,0,12)",
+   "history_periods": 24,
+   "history_start": "2009-12-01",
+   "history_end": "2011-11-01",
+   "order": [
+    0,
+    0,
+    2
+   ],
+   "seasonal_order": [
+    0,
+    1,
+    0,
+    12
+   ],
+   "drift": false,
+   "seasonal_strength": 1.0,
+   "aic": 238.7,
+   "ljung_box_p": 0.799,
+   "backtest_periods": 4,
+   "backtest_model": "SARIMA(0,0,1)(0,1,0,12)",
+   "metrics": {
+    "sarima": {
+     "mape_pct": 5.9,
+     "smape_pct": 6.2,
+     "mae": 60213.3,
+     "rmse": 75760.8
+    },
+    "naive": {
+     "mape_pct": 31.8,
+     "smape_pct": 40.2,
+     "mae": 399275.6,
+     "rmse": 479892.3
+    },
+    "seasonal_naive": {
+     "mape_pct": 6.1,
+     "smape_pct": 6.5,
+     "mae": 61884.9,
+     "rmse": 77056.9
+    }
+   },
+   "beats_seasonal_naive": true,
+   "improvement_vs_seasonal_naive_pct": 2.7,
+   "confidence": "fair",
+   "forecast": [
+    {
+     "period": "2011-12-01",
+     "forecast": 829860.6,
+     "lower_80": 745806.9,
+     "upper_80": 913914.2,
+     "lower_95": 701311.6,
+     "upper_95": 958409.6
+    },
+    {
+     "period": "2012-01-01",
+     "forecast": 690756.8,
+     "lower_80": 604936.2,
+     "upper_80": 776577.4,
+     "lower_95": 559505.6,
+     "upper_95": 822008.1
+    },
+    {
+     "period": "2012-02-01",
+     "forecast": 522545.6,
+     "lower_80": 436706.5,
+     "upper_80": 608384.6,
+     "lower_95": 391266.0,
+     "upper_95": 653825.1
+    },
+    {
+     "period": "2012-03-01",
+     "forecast": 716215.3,
+     "lower_80": 630376.2,
+     "upper_80": 802054.3,
+     "lower_95": 584935.7,
+     "upper_95": 847494.8
+    },
+    {
+     "period": "2012-04-01",
+     "forecast": 536968.5,
+     "lower_80": 451129.4,
+     "upper_80": 622807.6,
+     "lower_95": 405689.0,
+     "upper_95": 668248.0
+    },
+    {
+     "period": "2012-05-01",
+     "forecast": 769296.6,
+     "lower_80": 683457.5,
+     "upper_80": 855135.7,
+     "lower_95": 638017.1,
+     "upper_95": 900576.1
+    }
+   ],
+   "backtest": [
+    {
+     "period": "2011-08-01",
+     "actual": 757841.4,
+     "sarima": 701938.5,
+     "seasonal_naive": 695251.9
+    },
+    {
+     "period": "2011-09-01",
+     "actual": 1056435.2,
+     "sarima": 921697.0,
+     "seasonal_naive": 921697.0
+    },
+    {
+     "period": "2011-10-01",
+     "actual": 1151263.7,
+     "sarima": 1161902.2,
+     "seasonal_naive": 1161902.2
+    },
+    {
+     "period": "2011-11-01",
+     "actual": 1503866.8,
+     "sarima": 1464293.1,
+     "seasonal_naive": 1464293.1
+    }
+   ],
+   "history": [
+    {
+     "period": "2009-12-01",
+     "actual": 822483.9
+    },
+    {
+     "period": "2010-01-01",
+     "actual": 651155.1
+    },
+    {
+     "period": "2010-02-01",
+     "actual": 551504.7
+    },
+    {
+     "period": "2010-03-01",
+     "actual": 830915.3
+    },
+    {
+     "period": "2010-04-01",
+     "actual": 678875.3
+    },
+    {
+     "period": "2010-05-01",
+     "actual": 657705.5
+    },
+    {
+     "period": "2010-06-01",
+     "actual": 749537.3
+    },
+    {
+     "period": "2010-07-01",
+     "actual": 648810.3
+    },
+    {
+     "period": "2010-08-01",
+     "actual": 695251.9
+    },
+    {
+     "period": "2010-09-01",
+     "actual": 921697.0
+    },
+    {
+     "period": "2010-10-01",
+     "actual": 1161902.2
+    },
+    {
+     "period": "2010-11-01",
+     "actual": 1464293.1
+    },
+    {
+     "period": "2010-12-01",
+     "actual": 821452.7
+    },
+    {
+     "period": "2011-01-01",
+     "actual": 689811.6
+    },
+    {
+     "period": "2011-02-01",
+     "actual": 522545.6
+    },
+    {
+     "period": "2011-03-01",
+     "actual": 716215.3
+    },
+    {
+     "period": "2011-04-01",
+     "actual": 536968.5
+    },
+    {
+     "period": "2011-05-01",
+     "actual": 769296.6
+    },
+    {
+     "period": "2011-06-01",
+     "actual": 760547.0
+    },
+    {
+     "period": "2011-07-01",
+     "actual": 718076.1
+    },
+    {
+     "period": "2011-08-01",
+     "actual": 757841.4
+    },
+    {
+     "period": "2011-09-01",
+     "actual": 1056435.2
+    },
+    {
+     "period": "2011-10-01",
+     "actual": 1151263.7
+    },
+    {
+     "period": "2011-11-01",
+     "actual": 1503866.8
+    }
+   ],
+   "warnings": [
+    "The last period was incomplete and was dropped.",
+    "The backtest is small (4 test periods, model fitted on 6 effective periods), so its accuracy figures are indicative only."
+   ]
+  },
+  "week": {
+   "grain": "week",
+   "model": "SARIMA(0,0,2)(0,1,0,52)",
+   "history_periods": 104,
+   "history_start": "2009-12-07",
+   "history_end": "2011-11-28",
+   "order": [
+    0,
+    0,
+    2
+   ],
+   "seasonal_order": [
+    0,
+    1,
+    0,
+    52
+   ],
+   "drift": false,
+   "seasonal_strength": 1.0,
+   "aic": 1187.3,
+   "ljung_box_p": 0.884,
+   "backtest_periods": 13,
+   "backtest_model": "SARIMA(2,0,2)(0,1,0,52)",
+   "metrics": {
+    "sarima": {
+     "mape_pct": 18.0,
+     "smape_pct": 17.6,
+     "mae": 45034.6,
+     "rmse": 56933.0
+    },
+    "naive": {
+     "mape_pct": 44.2,
+     "smape_pct": 58.3,
+     "mae": 134551.1,
+     "rmse": 146871.2
+    },
+    "seasonal_naive": {
+     "mape_pct": 18.1,
+     "smape_pct": 17.7,
+     "mae": 45257.2,
+     "rmse": 57993.8
+    }
+   },
+   "beats_seasonal_naive": true,
+   "improvement_vs_seasonal_naive_pct": 0.5,
+   "confidence": "fair",
+   "forecast": [
+    {
+     "period": "2011-12-05",
+     "forecast": 330895.2,
+     "lower_80": 277779.6,
+     "upper_80": 384010.9,
+     "lower_95": 249661.9,
+     "upper_95": 412128.6
+    },
+    {
+     "period": "2011-12-12",
+     "forecast": 214802.8,
+     "lower_80": 161686.5,
+     "upper_80": 267919.2,
+     "lower_95": 133568.4,
+     "upper_95": 296037.3
+    },
+    {
+     "period": "2011-12-19",
+     "forecast": 92318.0,
+     "lower_80": 38775.4,
+     "upper_80": 145860.6,
+     "lower_95": 10431.6,
+     "upper_95": 174204.4
+    },
+    {
+     "period": "2011-12-26",
+     "forecast": 0.0,
+     "lower_80": -53542.6,
+     "upper_80": 53542.6,
+     "lower_95": -81886.4,
+     "upper_95": 81886.4
+    },
+    {
+     "period": "2012-01-02",
+     "forecast": 133429.7,
+     "lower_80": 79887.1,
+     "upper_80": 186972.4,
+     "lower_95": 51543.3,
+     "upper_95": 215316.1
+    },
+    {
+     "period": "2012-01-09",
+     "forecast": 192992.0,
+     "lower_80": 139449.3,
+     "upper_80": 246534.6,
+     "lower_95": 111105.6,
+     "upper_95": 274878.3
+    },
+    {
+     "period": "2012-01-16",
+     "forecast": 215227.0,
+     "lower_80": 161684.4,
+     "upper_80": 268769.6,
+     "lower_95": 133340.6,
+     "upper_95": 297113.4
+    },
+    {
+     "period": "2012-01-23",
+     "forecast": 124534.2,
+     "lower_80": 70991.6,
+     "upper_80": 178076.9,
+     "lower_95": 42647.8,
+     "upper_95": 206420.6
+    },
+    {
+     "period": "2012-01-30",
+     "forecast": 125847.4,
+     "lower_80": 72304.7,
+     "upper_80": 179390.0,
+     "lower_95": 43961.0,
+     "upper_95": 207733.8
+    },
+    {
+     "period": "2012-02-06",
+     "forecast": 106893.2,
+     "lower_80": 53350.6,
+     "upper_80": 160435.9,
+     "lower_95": 25006.8,
+     "upper_95": 188779.6
+    },
+    {
+     "period": "2012-02-13",
+     "forecast": 143354.2,
+     "lower_80": 89811.6,
+     "upper_80": 196896.8,
+     "lower_95": 61467.8,
+     "upper_95": 225240.6
+    },
+    {
+     "period": "2012-02-20",
+     "forecast": 148404.2,
+     "lower_80": 94861.6,
+     "upper_80": 201946.8,
+     "lower_95": 66517.8,
+     "upper_95": 230290.6
+    }
+   ],
+   "backtest": [
+    {
+     "period": "2011-09-05",
+     "actual": 191912.1,
+     "sarima": 136594.0,
+     "seasonal_naive": 132685.2
+    },
+    {
+     "period": "2011-09-12",
+     "actual": 229688.2,
+     "sarima": 170947.2,
+     "seasonal_naive": 179065.1
+    },
+    {
+     "period": "2011-09-19",
+     "actual": 338294.1,
+     "sarima": 253301.2,
+     "seasonal_naive": 245359.9
+    },
+    {
+     "period": "2011-09-26",
+     "actual": 211446.8,
+     "sarima": 327756.2,
+     "seasonal_naive": 332442.2
+    },
+    {
+     "period": "2011-10-03",
+     "actual": 319084.8,
+     "sarima": 293221.3,
+     "seasonal_naive": 292718.0
+    },
+    {
+     "period": "2011-10-10",
+     "actual": 228037.1,
+     "sarima": 329055.7,
+     "seasonal_naive": 326358.2
+    },
+    {
+     "period": "2011-10-17",
+     "actual": 275970.4,
+     "sarima": 241848.1,
+     "seasonal_naive": 245780.4
+    },
+    {
+     "period": "2011-10-24",
+     "actual": 259312.5,
+     "sarima": 223185.9,
+     "seasonal_naive": 219916.3
+    },
+    {
+     "period": "2011-10-31",
+     "actual": 300643.1,
+     "sarima": 286030.5,
+     "seasonal_naive": 287536.3
+    },
+    {
+     "period": "2011-11-07",
+     "actual": 368996.3,
+     "sarima": 380427.5,
+     "seasonal_naive": 380781.0
+    },
+    {
+     "period": "2011-11-14",
+     "actual": 387064.7,
+     "sarima": 355563.9,
+     "seasonal_naive": 354015.1
+    },
+    {
+     "period": "2011-11-21",
+     "actual": 315114.1,
+     "sarima": 301201.4,
+     "seasonal_naive": 302998.1
+    },
+    {
+     "period": "2011-11-28",
+     "actual": 323398.7,
+     "sarima": 324899.0,
+     "seasonal_naive": 323632.2
+    }
+   ],
+   "history": [
+    {
+     "period": "2009-12-07",
+     "actual": 240516.4
+    },
+    {
+     "period": "2009-12-14",
+     "actual": 260473.3
+    },
+    {
+     "period": "2009-12-21",
+     "actual": 55189.6
+    },
+    {
+     "period": "2009-12-28",
+     "actual": 0.0
+    },
+    {
+     "period": "2010-01-04",
+     "actual": 168228.6
+    },
+    {
+     "period": "2010-01-11",
+     "actual": 163595.6
+    },
+    {
+     "period": "2010-01-18",
+     "actual": 153725.9
+    },
+    {
+     "period": "2010-01-25",
+     "actual": 165605.1
+    },
+    {
+     "period": "2010-02-01",
+     "actual": 124084.1
+    },
+    {
+     "period": "2010-02-08",
+     "actual": 90814.1
+    },
+    {
+     "period": "2010-02-15",
+     "actual": 174496.6
+    },
+    {
+     "period": "2010-02-22",
+     "actual": 162110.0
+    },
+    {
+     "period": "2010-03-01",
+     "actual": 165865.6
+    },
+    {
+     "period": "2010-03-08",
+     "actual": 141839.5
+    },
+    {
+     "period": "2010-03-15",
+     "actual": 189513.7
+    },
+    {
+     "period": "2010-03-22",
+     "actual": 205712.8
+    },
+    {
+     "period": "2010-03-29",
+     "actual": 158751.6
+    },
+    {
+     "period": "2010-04-05",
+     "actual": 138173.7
+    },
+    {
+     "period": "2010-04-12",
+     "actual": 153156.4
+    },
+    {
+     "period": "2010-04-19",
+     "actual": 180330.2
+    },
+    {
+     "period": "2010-04-26",
+     "actual": 188789.2
+    },
+    {
+     "period": "2010-05-03",
+     "actual": 163981.1
+    },
+    {
+     "period": "2010-05-10",
+     "actual": 171271.1
+    },
+    {
+     "period": "2010-05-17",
+     "actual": 150202.7
+    },
+    {
+     "period": "2010-05-24",
+     "actual": 159908.4
+    },
+    {
+     "period": "2010-05-31",
+     "actual": 108024.3
+    },
+    {
+     "period": "2010-06-07",
+     "actual": 219386.5
+    },
+    {
+     "period": "2010-06-14",
+     "actual": 171986.6
+    },
+    {
+     "period": "2010-06-21",
+     "actual": 126710.0
+    },
+    {
+     "period": "2010-06-28",
+     "actual": 180826.9
+    },
+    {
+     "period": "2010-07-05",
+     "actual": 153793.3
+    },
+    {
+     "period": "2010-07-12",
+     "actual": 158769.8
+    },
+    {
+     "period": "2010-07-19",
+     "actual": 147566.2
+    },
+    {
+     "period": "2010-07-26",
+     "actual": 161921.8
+    },
+    {
+     "period": "2010-08-02",
+     "actual": 130786.1
+    },
+    {
+     "period": "2010-08-09",
+     "actual": 179584.7
+    },
+    {
+     "period": "2010-08-16",
+     "actual": 169503.1
+    },
+    {
+     "period": "2010-08-23",
+     "actual": 148827.3
+    },
+    {
+     "period": "2010-08-30",
+     "actual": 145186.6
+    },
+    {
+     "period": "2010-09-06",
+     "actual": 132685.2
+    },
+    {
+     "period": "2010-09-13",
+     "actual": 179065.1
+    },
+    {
+     "period": "2010-09-20",
+     "actual": 245359.9
+    },
+    {
+     "period": "2010-09-27",
+     "actual": 332442.2
+    },
+    {
+     "period": "2010-10-04",
+     "actual": 292718.0
+    },
+    {
+     "period": "2010-10-11",
+     "actual": 326358.2
+    },
+    {
+     "period": "2010-10-18",
+     "actual": 245780.4
+    },
+    {
+     "period": "2010-10-25",
+     "actual": 219916.3
+    },
+    {
+     "period": "2010-11-01",
+     "actual": 287536.3
+    },
+    {
+     "period": "2010-11-08",
+     "actual": 380781.0
+    },
+    {
+     "period": "2010-11-15",
+     "actual": 354015.1
+    },
+    {
+     "period": "2010-11-22",
+     "actual": 302998.1
+    },
+    {
+     "period": "2010-11-29",
+     "actual": 323632.2
+    },
+    {
+     "period": "2010-12-06",
+     "actual": 329108.2
+    },
+    {
+     "period": "2010-12-13",
+     "actual": 215357.0
+    },
+    {
+     "period": "2010-12-20",
+     "actual": 92318.0
+    },
+    {
+     "period": "2010-12-27",
+     "actual": 0.0
+    },
+    {
+     "period": "2011-01-03",
+     "actual": 133429.7
+    },
+    {
+     "period": "2011-01-10",
+     "actual": 192992.0
+    },
+    {
+     "period": "2011-01-17",
+     "actual": 215227.0
+    },
+    {
+     "period": "2011-01-24",
+     "actual": 124534.2
+    },
+    {
+     "period": "2011-01-31",
+     "actual": 125847.4
+    },
+    {
+     "period": "2011-02-07",
+     "actual": 106893.2
+    },
+    {
+     "period": "2011-02-14",
+     "actual": 143354.2
+    },
+    {
+     "period": "2011-02-21",
+     "actual": 148404.2
+    },
+    {
+     "period": "2011-02-28",
+     "actual": 132503.6
+    },
+    {
+     "period": "2011-03-07",
+     "actual": 135076.5
+    },
+    {
+     "period": "2011-03-14",
+     "actual": 161082.6
+    },
+    {
+     "period": "2011-03-21",
+     "actual": 149292.7
+    },
+    {
+     "period": "2011-03-28",
+     "actual": 192398.1
+    },
+    {
+     "period": "2011-04-04",
+     "actual": 134211.4
+    },
+    {
+     "period": "2011-04-11",
+     "actual": 149357.4
+    },
+    {
+     "period": "2011-04-18",
+     "actual": 141530.4
+    },
+    {
+     "period": "2011-04-25",
+     "actual": 86364.6
+    },
+    {
+     "period": "2011-05-02",
+     "actual": 146706.5
+    },
+    {
+     "period": "2011-05-09",
+     "actual": 211708.3
+    },
+    {
+     "period": "2011-05-16",
+     "actual": 215384.2
+    },
+    {
+     "period": "2011-05-23",
+     "actual": 165886.8
+    },
+    {
+     "period": "2011-05-30",
+     "actual": 118357.1
+    },
+    {
+     "period": "2011-06-06",
+     "actual": 219836.8
+    },
+    {
+     "period": "2011-06-13",
+     "actual": 189877.9
+    },
+    {
+     "period": "2011-06-20",
+     "actual": 135745.7
+    },
+    {
+     "period": "2011-06-27",
+     "actual": 138987.1
+    },
+    {
+     "period": "2011-07-04",
+     "actual": 177154.3
+    },
+    {
+     "period": "2011-07-11",
+     "actual": 136911.5
+    },
+    {
+     "period": "2011-07-18",
+     "actual": 202130.2
+    },
+    {
+     "period": "2011-07-25",
+     "actual": 182275.2
+    },
+    {
+     "period": "2011-08-01",
+     "actual": 170460.2
+    },
+    {
+     "period": "2011-08-08",
+     "actual": 190121.4
+    },
+    {
+     "period": "2011-08-15",
+     "actual": 175570.7
+    },
+    {
+     "period": "2011-08-22",
+     "actual": 164484.1
+    },
+    {
+     "period": "2011-08-29",
+     "actual": 153830.6
+    },
+    {
+     "period": "2011-09-05",
+     "actual": 191912.1
+    },
+    {
+     "period": "2011-09-12",
+     "actual": 229688.2
+    },
+    {
+     "period": "2011-09-19",
+     "actual": 338294.1
+    },
+    {
+     "period": "2011-09-26",
+     "actual": 211446.8
+    },
+    {
+     "period": "2011-10-03",
+     "actual": 319084.8
+    },
+    {
+     "period": "2011-10-10",
+     "actual": 228037.1
+    },
+    {
+     "period": "2011-10-17",
+     "actual": 275970.4
+    },
+    {
+     "period": "2011-10-24",
+     "actual": 259312.5
+    },
+    {
+     "period": "2011-10-31",
+     "actual": 300643.1
+    },
+    {
+     "period": "2011-11-07",
+     "actual": 368996.3
+    },
+    {
+     "period": "2011-11-14",
+     "actual": 387064.7
+    },
+    {
+     "period": "2011-11-21",
+     "actual": 315114.1
+    },
+    {
+     "period": "2011-11-28",
+     "actual": 323398.7
+    }
+   ],
+   "warnings": [
+    "2 period(s) with no data were filled with 0.",
+    "The first period was incomplete and was dropped.",
+    "The last period was incomplete and was dropped.",
+    "Some lower interval bounds are below zero; the metric cannot be negative, so read them as 0."
+   ]
+  }
+ }
+}

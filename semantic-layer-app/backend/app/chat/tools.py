@@ -1,10 +1,13 @@
 """Tools exposed to the LLM (P6-07..P6-13). Every tool runs locally against the source."""
 
+import hashlib
 import json
+import threading
 import time
+from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Type
+from typing import Any, Callable, Dict, List, Literal, Optional, Type
 
 import sqlglot
 from pydantic import BaseModel, Field, ValidationError
@@ -64,6 +67,27 @@ class DescribeColumnArgs(BaseModel):
 
 class RunSqlArgs(BaseModel):
     query: str = Field(description="A single read-only SELECT against the table `src`.")
+
+
+class SegmentArgs(BaseModel):
+    method: Literal["kmeans", "rfm"] = Field(
+        "kmeans",
+        description="kmeans: data-driven clusters on recency, frequency and spend; "
+        "rfm: named RFM segments such as Champions, Loyal Customers, At Risk.",
+    )
+    k: Optional[int] = Field(None, ge=2, le=10, description="Number of clusters; omit to choose by silhouette.")
+    customer_column: Optional[str] = Field(None, description="Customer identifier column; omit to detect.")
+    transaction_column: Optional[str] = Field(None, description="Invoice/order column; omit to detect.")
+    time_dimension: Optional[str] = Field(None, description="Date column; omit to use the default.")
+    monetary_metric: Optional[str] = Field(None, description="Sum-type metric for spend, e.g. total_revenue.")
+
+
+class ForecastArgs(BaseModel):
+    metric: str = Field(description="Metric to forecast, e.g. total_revenue.")
+    grain: Literal["day", "week", "month"] = Field("month", description="Period length of the series.")
+    horizon: Optional[int] = Field(None, ge=1, le=60, description="Periods ahead; default 6 months/12 weeks/14 days.")
+    time_dimension: Optional[str] = Field(None, description="Date column; omit to use the default.")
+    filters: List[Filter] = Field(default_factory=list, description="Optional filters, as in query_metrics.")
 
 
 # --------------------------------------------------------------------------- helpers
@@ -268,6 +292,171 @@ def t_run_sql(ctx: ToolContext, a: RunSqlArgs) -> ToolOutput:
     return _result_payload(None, res, [])
 
 
+# --------------------------------------------------------------------------- analyses (P11, P12)
+# Analyses run locally on all rows; only segment- or period-level summaries reach the LLM (NFR-08).
+
+_ANALYSIS_CACHE: "OrderedDict[str, ToolOutput]" = OrderedDict()
+_ANALYSIS_LOCK = threading.Lock()
+
+
+def _analysis_key(ctx: ToolContext, name: str, args: BaseModel) -> str:
+    p = Path(ctx.parquet_path)
+    raw = json.dumps(
+        [str(p), p.stat().st_mtime_ns, name, args.model_dump(mode="json"), ctx.model.model_dump(mode="json")],
+        sort_keys=True,
+        default=str,
+    )
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def _cached(ctx: ToolContext, name: str, args: BaseModel, run: Callable[[], ToolOutput]) -> ToolOutput:
+    """P10-06: the same analysis on the same data returns the stored result."""
+    key = _analysis_key(ctx, name, args)
+    with _ANALYSIS_LOCK:
+        hit = _ANALYSIS_CACHE.get(key)
+    if hit is not None:
+        return ToolOutput(hit.llm, {**hit.ui, "cached": True})
+    out = run()
+    with _ANALYSIS_LOCK:
+        _ANALYSIS_CACHE[key] = out
+        while len(_ANALYSIS_CACHE) > 32:
+            _ANALYSIS_CACHE.popitem(last=False)
+    return out
+
+
+def _table(columns: List[Dict[str, str]], rows: List[List[Any]], chart: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "columns": [c["name"] for c in columns],
+        "rows": rows,
+        "total_rows": len(rows),
+        "truncated": False,
+        "column_meta": [{"unit": None, **c} for c in columns],
+        "chart": chart,
+    }
+
+
+def t_segment_customers(ctx: ToolContext, a: SegmentArgs) -> ToolOutput:
+    def run() -> ToolOutput:
+        from ..analytics.segmentation import segment
+        from ..analytics.sources import AnalysisInputError, load_transactions
+
+        started = time.perf_counter()
+        try:
+            tx, used = load_transactions(
+                ctx.model,
+                ctx.parquet_path,
+                a.customer_column,
+                a.transaction_column,
+                a.time_dimension,
+                a.monetary_metric,
+                timeout_s=max(30.0, ctx.rt.query_timeout_s),
+            )
+            res = segment(tx, k=a.k)
+        except (AnalysisInputError, engine.QueryError, ValueError) as e:
+            raise ToolError(str(e)) from e
+        summary = {
+            "method": "RFM (recency, frequency, monetary) per customer; K-means on log-scaled, standardised RFM, "
+            "k = 2..10 compared by inertia and silhouette, seed 42",
+            "columns_used": used,
+            "customers": res.customers,
+            "as_of": res.as_of,
+            "k": res.k,
+            "mean_silhouette": res.silhouette,
+            "k_scores": res.k_scores,
+            "clusters": res.clusters,
+            "rfm_segments": res.rfm_segments,
+            "rfm_vs_cluster_adjusted_rand_index": res.agreement_ari,
+            "warnings": res.warnings,
+            "privacy": "Segment-level summaries only; individual customers are never returned.",
+        }
+        if a.method == "rfm":
+            key, items, title = "segment", res.rfm_segments, "RFM segment"
+        else:
+            key, items, title = "cluster", res.clusters, "Cluster"
+        cols = [
+            {"name": key, "kind": "dimension", "display_name": title},
+            {"name": "customers", "kind": "metric", "display_name": "Customers"},
+            {"name": "customer_share_pct", "kind": "metric", "display_name": "Share of customers %"},
+            {"name": "revenue_share_pct", "kind": "metric", "display_name": "Share of revenue %"},
+            {"name": "avg_recency_days", "kind": "metric", "display_name": "Avg days since last order"},
+            {"name": "avg_frequency", "kind": "metric", "display_name": "Avg orders"},
+            {"name": "avg_monetary", "kind": "metric", "display_name": "Avg spend"},
+        ]
+        rows = [[it[c["name"]] for c in cols] for it in items]
+        ui = {
+            **_table(cols, rows, {"kind": "bar", "y": ["customer_share_pct", "revenue_share_pct"]}),
+            "quality": {"k": res.k, "mean_silhouette": res.silhouette, "k_scores": res.k_scores},
+            "execution_ms": round((time.perf_counter() - started) * 1000),
+        }
+        return ToolOutput(summary, ui)
+
+    return _cached(ctx, "segment_customers", a, run)
+
+
+def t_forecast_metric(ctx: ToolContext, a: ForecastArgs) -> ToolOutput:
+    def run() -> ToolOutput:
+        from ..analytics.forecast import complete_series, forecast
+        from ..analytics.sources import AnalysisInputError, load_series
+
+        started = time.perf_counter()
+        try:
+            s, start, end, used = load_series(
+                ctx.model,
+                ctx.parquet_path,
+                a.metric,
+                a.grain,
+                a.time_dimension,
+                a.filters,
+                timeout_s=max(30.0, ctx.rt.query_timeout_s),
+            )
+            if s.empty:
+                raise ToolError("No data for this metric and filters.")
+            y, notes = complete_series(s, a.grain, start, end)
+            res = forecast(y, a.grain, a.horizon, notes)
+        except (AnalysisInputError, engine.QueryError, ValueError) as e:
+            raise ToolError(str(e)) from e
+        summary = {
+            "method": "SARIMA; differencing from ADF/KPSS and STL seasonal strength; orders and drift by AIC; "
+            "backtest on the last periods with orders chosen on the training part only",
+            "columns_used": used,
+            "model": res.model,
+            "history": {"periods": res.history_periods, "start": res.history_start, "end": res.history_end},
+            "seasonal_strength": res.seasonal_strength,
+            "backtest": {
+                "periods": res.backtest_periods,
+                "model": res.backtest_model,
+                "error_by_model": res.metrics,
+                "beats_seasonal_naive": res.beats_seasonal_naive,
+                "mae_improvement_vs_seasonal_naive_pct": res.improvement_vs_seasonal_naive_pct,
+            },
+            "ljung_box_p": res.ljung_box_p,
+            "confidence": res.confidence,
+            "last_actuals": res.history[-6:],
+            "forecast": res.forecast,
+            "warnings": res.warnings,
+        }
+        room = max(0, ctx.rt.row_cap - len(res.forecast))
+        hist = res.history[-room:] if room else []
+        cols = [
+            {"name": "period", "kind": "time", "display_name": "Period"},
+            {"name": "actual", "kind": "metric", "display_name": "Actual"},
+            {"name": "forecast", "kind": "metric", "display_name": "Forecast"},
+            {"name": "lower_95", "kind": "metric", "display_name": "95% lower"},
+            {"name": "upper_95", "kind": "metric", "display_name": "95% upper"},
+        ]
+        rows = [[h["period"], h["actual"], None, None, None] for h in hist] + [
+            [f["period"], None, f["forecast"], f["lower_95"], f["upper_95"]] for f in res.forecast
+        ]
+        ui = {
+            **_table(cols, rows, {"kind": "line", "y": ["actual", "forecast"], "band": ["lower_95", "upper_95"]}),
+            "quality": summary["backtest"] | {"confidence": res.confidence, "ljung_box_p": res.ljung_box_p},
+            "execution_ms": round((time.perf_counter() - started) * 1000),
+        }
+        return ToolOutput(summary, ui)
+
+    return _cached(ctx, "forecast_metric", a, run)
+
+
 # --------------------------------------------------------------------------- registry
 
 
@@ -320,6 +509,20 @@ TOOLS: List[Tool] = [
         RunSqlArgs,
         t_run_sql,
         lambda rt: rt.raw_sql_enabled,
+    ),
+    Tool(
+        "segment_customers",
+        "Segment customers by recency, frequency and spend (RFM + K-means), computed locally. "
+        "Returns segment sizes, profiles and quality scores, never individual customers.",
+        SegmentArgs,
+        t_segment_customers,
+    ),
+    Tool(
+        "forecast_metric",
+        "Forecast a metric over time with SARIMA, with 80%/95% intervals and a backtest against "
+        "naive and seasonal-naive baselines. Use for predictions of future values.",
+        ForecastArgs,
+        t_forecast_metric,
     ),
 ]
 

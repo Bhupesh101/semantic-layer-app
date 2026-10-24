@@ -50,6 +50,37 @@ def open_sandbox(parquet_path: Path) -> duckdb.DuckDBPyConnection:
     return con
 
 
+def fetch_df(
+    parquet_path: Path,
+    sql: str,
+    params: Optional[Sequence[Any]] = None,
+    *,
+    timeout_s: float = 30.0,
+    max_rows: int = 5_000_000,
+):
+    """Run a SELECT in the sandbox and return every row as a DataFrame, for local analyses only (P10-04).
+
+    The result never goes to the LLM as-is; analyses summarise it first (P10-11).
+    """
+    con = open_sandbox(Path(parquet_path))
+    timer = threading.Timer(timeout_s, con.interrupt)
+    timer.start()
+    try:
+        df = con.execute(f"SELECT * FROM ({sql}) AS q LIMIT {int(max_rows) + 1}", list(params or [])).df()
+    except duckdb.InterruptException as e:
+        raise QueryTimeout(f"Query exceeded the {timeout_s:g}s timeout.") from e
+    except duckdb.Error as e:
+        if not timer.is_alive():
+            raise QueryTimeout(f"Query exceeded the {timeout_s:g}s timeout.") from e
+        raise QueryError(str(e).split("\n")[0]) from e
+    finally:
+        timer.cancel()
+        con.close()
+    if len(df) > max_rows:
+        raise QueryError(f"More than {max_rows:,} rows; narrow the analysis with filters.")
+    return df
+
+
 def execute(
     parquet_path: Path,
     sql: str,

@@ -123,7 +123,7 @@ function AssistantTurn({ turn, streaming }: { turn: Turn; streaming: boolean }) 
         s.ok &&
         s.result?.rows &&
         s.result.column_meta?.length &&
-        ["query_metrics", "get_rows", "run_sql"].includes(s.name),
+        ["query_metrics", "get_rows", "run_sql", "segment_customers", "forecast_metric"].includes(s.name),
     );
   return (
     <div className="max-w-full">

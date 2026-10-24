@@ -10,10 +10,11 @@ Ask questions about a CSV in plain English without sending the dataset to an LLM
 
 ## Quick start (local)
 
-Requirements: Python 3.9+ and Node 18+.
+Requirements: Python 3.12+ and Node 18+.
 
 ```bash
 ./scripts/dev.sh            # creates backend/.venv, installs deps, runs both servers
+PYTHON=python3.12 ./scripts/dev.sh   # if your default python3 is older than 3.12 (e.g. macOS's 3.9)
 ```
 
 Then open http://localhost:5173, go to **Providers**, and add one:
@@ -30,6 +31,19 @@ cd frontend && npm install && npm run dev          # UI on :5173, proxies /api t
 ```
 
 Single-process mode: `cd frontend && npm run build`, then the backend serves the UI at http://127.0.0.1:8000.
+
+## Analyses
+
+In chat, the LLM can call two local analyses. Only segment- or period-level summaries reach the LLM.
+
+- `segment_customers`: RFM scores and named segments, plus K-means on log-scaled RFM with k chosen by silhouette.
+- `forecast_metric`: SARIMA with differencing from ADF/KPSS and STL seasonal strength, orders and drift by AIC, 80%/95% intervals, and a backtest against naive and seasonal-naive baselines.
+
+`analysis/retail_analysis.py` runs the same code on the two-year Online Retail II workbook (`data/online_retail_II.xlsx`) and writes charts and a report to `analysis/output/`:
+
+```bash
+backend/.venv/bin/python analysis/retail_analysis.py
+```
 
 Docker: `docker compose up --build` (add `--profile ollama` for a local Ollama container). The UI is on :5173 and the API on :8000.
 

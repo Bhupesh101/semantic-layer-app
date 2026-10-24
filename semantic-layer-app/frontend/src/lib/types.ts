@@ -257,6 +257,8 @@ export interface ToolResultUI {
     display_name: string;
     unit?: string;
   }[];
+  /** Set by analysis tools: which metrics to plot, and an optional [lower, upper] interval band. */
+  chart?: { kind: "bar" | "line"; y: string[]; band?: [string, string] };
   [k: string]: any;
 }
 

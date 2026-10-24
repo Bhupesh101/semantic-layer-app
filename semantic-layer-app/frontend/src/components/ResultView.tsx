@@ -1,10 +1,11 @@
 import { useState } from "react";
 import {
+  Area,
   Bar,
   BarChart,
   CartesianGrid,
+  ComposedChart,
   Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -15,19 +16,27 @@ import { Button, DataTable } from "./ui";
 
 const COLORS = ["#4f46e5", "#0891b2", "#d97706", "#db2777", "#059669"];
 
-/** A chart is offered when the result is one time/category dimension plus 1–5 numeric metrics (P7-05). */
+/** A chart is offered when the result is one time/category dimension plus 1–5 numeric metrics (P7-05).
+ * Analysis tools may name the metrics to plot and an interval band in `result.chart`. */
 function chartShape(r: ToolResultUI) {
   const meta = r.column_meta ?? [];
   const dims = meta.filter((m) => m.kind !== "metric");
-  const metrics = meta.filter((m) => m.kind === "metric");
+  const picked = r.chart
+    ? meta.filter((m) => r.chart!.y.includes(m.name))
+    : meta.filter((m) => m.kind === "metric");
+  const metrics = picked.filter((m) => m.kind === "metric");
   if (!r.rows || r.rows.length < 2 || dims.length !== 1 || metrics.length < 1 || metrics.length > 5)
     return null;
   const cols = r.columns ?? [];
   const xIdx = cols.indexOf(dims[0].name);
   const yIdx = metrics.map((m) => cols.indexOf(m.name));
-  if (xIdx < 0 || yIdx.some((i) => i < 0)) return null;
-  if (!r.rows.every((row) => yIdx.every((i) => typeof row[i] === "number" || row[i] === null))) return null;
-  return { kind: dims[0].kind === "time" ? "line" : "bar", x: dims[0], metrics, xIdx, yIdx };
+  const bandIdx = r.chart?.band ? r.chart.band.map((b) => cols.indexOf(b)) : null;
+  if (xIdx < 0 || yIdx.some((i) => i < 0) || bandIdx?.some((i) => i < 0)) return null;
+  const numeric = [...yIdx, ...(bandIdx ?? [])];
+  if (!r.rows.every((row) => numeric.every((i) => typeof row[i] === "number" || row[i] === null)))
+    return null;
+  const kind = r.chart?.kind ?? (dims[0].kind === "time" ? "line" : "bar");
+  return { kind, x: dims[0], metrics, xIdx, yIdx, bandIdx };
 }
 
 export default function ResultView({ result }: { result: ToolResultUI }) {
@@ -39,6 +48,9 @@ export default function ResultView({ result }: { result: ToolResultUI }) {
         Object.fromEntries([
           ["x", row[shape.xIdx]],
           ...shape.metrics.map((m, k) => [m.name, row[shape.yIdx[k]]]),
+          ...(shape.bandIdx && row[shape.bandIdx[0]] !== null
+            ? [["band", [row[shape.bandIdx[0]], row[shape.bandIdx[1]]]]]
+            : []),
         ]),
       )
     : [];
@@ -75,11 +87,21 @@ export default function ResultView({ result }: { result: ToolResultUI }) {
         <div className="h-64 w-full rounded-md bg-white p-2 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
           <ResponsiveContainer>
             {shape.kind === "line" ? (
-              <LineChart data={data} margin={{ left: 8, right: 8, top: 8 }}>
+              <ComposedChart data={data} margin={{ left: 8, right: 8, top: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="x" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={fmt} width={70} />
-                <Tooltip formatter={fmt} />
+                <Tooltip formatter={(v: any) => (Array.isArray(v) ? v.map(fmt).join(" – ") : fmt(v))} />
+                {shape.bandIdx && (
+                  <Area
+                    dataKey="band"
+                    name="95% interval"
+                    stroke="none"
+                    fill={COLORS[1]}
+                    fillOpacity={0.2}
+                    isAnimationActive={false}
+                  />
+                )}
                 {shape.metrics.map((m, i) => (
                   <Line
                     key={m.name}
@@ -91,7 +113,7 @@ export default function ResultView({ result }: { result: ToolResultUI }) {
                     strokeWidth={2}
                   />
                 ))}
-              </LineChart>
+              </ComposedChart>
             ) : (
               <BarChart data={data} margin={{ left: 8, right: 8, top: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
